@@ -1,6 +1,6 @@
 package ss.week4.math;
 
-public class Exponent implements Function{
+public class Exponent implements Function,Integrandable{
 	private int exponent;
 	
 	public Exponent(Integer exponent){
@@ -17,11 +17,16 @@ public class Exponent implements Function{
 		return new LinearProduct(new Constant(exponent),new Exponent(exponent-1));
 	}
 	
-	// This confuses me?!
+
 	@Override
 	public String toString() {
-		return "/^(" + exponent + ")";
+		return "(x^" + exponent + ")";
 
+	}
+
+	@Override
+	public Function integrand() {
+		return new LinearProduct(new Constant(exponent),new LinearProduct(new Constant(1/(exponent+1)),new Exponent(exponent+1)));
 	}
 
 }

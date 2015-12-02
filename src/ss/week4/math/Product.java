@@ -1,6 +1,6 @@
 package ss.week4.math;
 
-public class Product implements Function {
+public class Product implements Function, Integrandable {
 
 	private Function f1;
 	private Function f2;
@@ -22,8 +22,15 @@ public class Product implements Function {
 
 	@Override
 	public String toString() {
-		return f1.toString() + " * " + f2.toString();
+		return "(" + f1.toString() + ")" + " * " + "(" + f2.toString() + ")";
 
+	}
+
+	@Override
+	public Function integrand() {
+		// TODO Auto-generated method stub
+		System.out.println("not yet implemented");
+		return new Constant(0);
 	}
 
 }

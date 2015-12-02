@@ -8,8 +8,10 @@ public class Polynomial implements Function {
 		int i = 0;
 		nomials = new LinearProduct[args.length];
 		for(double n : args){
+			// This code is bullshit TODO for later.
 			nomials[i] = new LinearProduct(new Constant(args.length-i),new Exponent(args.length-i));
 			i++;
+			
 		}
 		
 	}
