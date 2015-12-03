@@ -13,7 +13,7 @@ public class LinearProduct extends Product {
 
 	@Override
 	public Function derivative(){
-		return new Product(f1,f2.derivative());
+		return new LinearProduct(f1,f2.derivative());
 	}
 
 	
