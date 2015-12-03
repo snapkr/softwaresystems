@@ -24,13 +24,14 @@ public class Polynomial implements Function {
 
 	@Override
 	public Function derivative() {
-		
+
 		Function returnSum = nomials[0].derivative();
+
 		for (int i = 1; i < nomials.length; i++) {
-			returnSum = new Sum(returnSum,nomials[i].derivative());
+			returnSum = new Sum(returnSum, nomials[i].derivative());
 		}
 		return returnSum;
-		
+
 	}
 
 }
