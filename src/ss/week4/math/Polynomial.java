@@ -1,6 +1,6 @@
 package ss.week4.math;
 
-public class Polynomial implements Function {
+public class Polynomial implements Function,Integrandable{
 
 	private LinearProduct[] nomials;
 
@@ -15,6 +15,7 @@ public class Polynomial implements Function {
 
 	@Override
 	public double apply(double arg) {
+		
 		double memory = 0;
 		for (int i = 0; i < nomials.length; i++) {
 			memory = memory + nomials[i].apply(arg);
@@ -26,12 +27,21 @@ public class Polynomial implements Function {
 	public Function derivative() {
 
 		Function returnSum = nomials[0].derivative();
-
 		for (int i = 1; i < nomials.length; i++) {
 			returnSum = new Sum(returnSum, nomials[i].derivative());
 		}
 		return returnSum;
 
+	}
+
+	@Override
+	public Function integrand() {
+		
+		Function returnSum = nomials[0].integrand();
+		for (int i = 1; i < nomials.length; i++) {
+			returnSum = new Sum(returnSum, nomials[i].integrand());
+		}
+		return returnSum;
 	}
 
 }
