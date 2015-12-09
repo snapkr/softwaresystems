@@ -1,7 +1,7 @@
 package ss.week4.tictactoe;
 
 /**
- * Game student for the Tic Tac Toe game. Module 2 lab assignment.
+ * Game board for the Tic Tac Toe game. Module 2 lab assignment.
  *
  * @author Theo Ruys en Arend Rensink
  * @version $Revision: 1.4 $
@@ -14,7 +14,7 @@ public class Board {
     private static final String DELIM = "     ";
 
     /**
-     * The DIM by DIM fields of the Tic Tac Toe student. See NUMBERING for the
+     * The DIM by DIM fields of the Tic Tac Toe board. See NUMBERING for the
      * coding of the fields.
      */
     //@ private invariant fields.length == DIM*DIM;
@@ -25,11 +25,17 @@ public class Board {
     // -- Constructors -----------------------------------------------
 
     /**
-     * Creates an empty student.
+     * Creates an empty board.
      */
     //@ ensures (\forall int i; 0 <= i & i < DIM * DIM; this.getField(i) == Mark.EMPTY);
     public Board() {
-    	// TODO: implement, see exercise P-4.18
+
+    	// Create a new board, represented by an 1x9-array, which is filled with Mark of state EMPTY.
+    	fields =  new Mark[DIM*DIM];
+    	for(int i = 0; i<fields.length;i++){
+    		fields[i] = Mark.EMPTY;
+    	}
+    	
     }
 
     /**
@@ -40,8 +46,13 @@ public class Board {
                                 \result.getField(i) == this.getField(i));
       @*/
     public Board deepCopy() {
-    	// TODO: implement, see exercise P-4.18
-        return null;
+  
+    	Board newBoard = new Board();
+    	for(int i = 0; i<fields.length;i++){
+    		Mark tmp = getField(i);
+    		newBoard.setField(i, tmp);
+    	}
+        return newBoard;
     }
 
     /**
@@ -53,31 +64,30 @@ public class Board {
     //@ requires 0 <= col & col < DIM;
     /*@pure*/
     public int index(int row, int col) {
-    	// TODO: implement, see exercise P-4.18
-        return 0;
+    	
+    	// TODO May check if everything is in bounds, but dosn´t have to -> precondition.<
+        return row + col*3;
     }
 
     /**
-     * Returns true if ix is a valid index of a field on the student.
+     * Returns true if ix is a valid index of a field on the board.
      * @return true if 0 <= index < DIM*DIM
      */
     //@ ensures \result == (0 <= index && index < DIM * DIM);
     /*@pure*/
     public boolean isField(int index) {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+        return 0 <= index && index > DIM*DIM;
     }
 
     /**
-     * Returns true of the (row,col) pair refers to a valid field on the student.
+     * Returns true of the (row,col) pair refers to a valid field on the board.
      *
      * @return true if 0 <= row < DIM && 0 <= col < DIM
      */
     //@ ensures \result == (0 <= row && row < DIM && 0 <= col && col < DIM);
     /*@pure*/
     public boolean isField(int row, int col) {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+        return 0 <= row && row < DIM && 0 <= col && col < DIM;
     }
     
     /**
@@ -91,8 +101,7 @@ public class Board {
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
     public Mark getField(int i) {
-    	// TODO: implement, see exercise P-4.18
-        return null;
+        return fields[i];
     }
 
     /**
@@ -108,8 +117,7 @@ public class Board {
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
     public Mark getField(int row, int col) {
-    	// TODO: implement, see exercise P-4.18
-        return null;
+        return getField(index(row,col));
     }
 
     /**
@@ -123,8 +131,7 @@ public class Board {
     //@ ensures \result == (this.getField(i) == Mark.EMPTY);
     /*@pure*/
     public boolean isEmptyField(int i) {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+        return getField(i) == Mark.EMPTY;
     }
 
     /**
@@ -140,33 +147,37 @@ public class Board {
     //@ ensures \result == (this.getField(row,col) == Mark.EMPTY);
     /*@pure*/
     public boolean isEmptyField(int row, int col) {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+        return getField(row,col) == Mark.EMPTY;
     }
 
     /**
-     * Tests if the whole student is full.
+     * Tests if the whole board is full.
      *
      * @return true if all fields are occupied
      */
     //@ ensures \result == (\forall int i; i <= 0 & i < DIM * DIM; this.getField(i) != Mark.EMPTY);
     /*@pure*/
     public boolean isFull() {
-    	// TODO: implement, see exercise P-4.18
+    	boolean full= true;
+    	for(int i = 0;i<fields.length;i++){
+    		if (isEmptyField(i)){
+    			full = false;
+    			break;
+    		}
+    	}
         return false;
     }
 
     /**
      * Returns true if the game is over. The game is over when there is a winner
-     * or the whole student is full.
+     * or the whole board is full.
      *
      * @return true if the game is over
      */
     //@ ensures \result == this.isFull() || this.hasWinner();
     /*@pure*/
     public boolean gameOver() {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+        return isWinner(Mark.OO) || isWinner(Mark.XX) || isFull();
     }
 
     /**
@@ -179,8 +190,27 @@ public class Board {
      */
     /*@ pure */
     public boolean hasRow(Mark m) {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+    	boolean tmp = true;
+    	boolean result = false;
+    	// for every row
+    	for (int i = 0;i<DIM;i++){
+    		// check each element of this row if it is of type m
+    		for(int j = 0; j<DIM;j++){
+    			// if one of the elements is not of type m, change tmp false
+    			if(getField(i,j) != m){
+    				tmp = false;
+    			}
+    		}
+    		// if a whole row is of mark m change result to true and break out of the loop.
+    		// otherwise reset tmp and continue.
+    		if(tmp == true){
+    			result = true;
+    			break;
+    		}else {
+    			tmp = true;
+    		}
+    	}
+    	return result;
     }
 
     /**
@@ -193,9 +223,29 @@ public class Board {
      */
     /*@ pure */
     public boolean hasColumn(Mark m) {
-    	// TODO: implement, see exercise P-4.18
-        return false;
+    	boolean tmp = true;
+    	boolean result = false;
+    	// for every column
+    	for (int i = 0;i<DIM;i++){
+    		// check each element of this column if it is of type m
+    		for(int j = 0; j<DIM;j++){
+    			// if one of the elements is not of type m, change tmp false
+    			if(getField(j,i) != m){
+    				tmp = false;
+    			}
+    		}
+    		// if a whole column is of mark m change result to true and break out of the loop.
+    		// otherwise reset tmp and continue.
+    		if(tmp == true){
+    			result = true;
+    			break;
+    		}else {
+    			tmp = true;
+    		}
+    	}
+    	return result;
     }
+
 
     /**
      * Checks whether there is a diagonal which is full and only contains the
@@ -207,7 +257,15 @@ public class Board {
      */
     /*@ pure */
     public boolean hasDiagonal(Mark m) {
-    	// TODO: implement, see exercise P-4.18
+    	boolean tmp = true;
+    	for(int i = 0;i<DIM;i++){
+    		for(int j = 0;j<DIM;j++){
+    			if(getField(j,i) != m){
+    				tmp = false;
+    			}
+    		}
+        		
+    	}
         return false;
     }
 
@@ -231,7 +289,7 @@ public class Board {
      * Returns true if the game has a winner. This is the case when one of the
      * marks controls at least one row, column or diagonal.
      *
-     * @return true if the student has a winner.
+     * @return true if the board has a winner.
      */
     //@ ensures \result == isWinner(Mark.XX) | \result == isWinner(Mark.OO);
     /*@pure*/
@@ -241,7 +299,7 @@ public class Board {
     }
 
     /**
-     * Returns a String representation of this student. In addition to the current
+     * Returns a String representation of this board. In addition to the current
      * situation, the String also shows the numbering of the fields.
      *
      * @return the game situation as String
@@ -265,7 +323,7 @@ public class Board {
     }
 
     /**
-     * Empties all fields of this student (i.e., let them refer to the value
+     * Empties all fields of this board (i.e., let them refer to the value
      * Mark.EMPTY).
      */
     /*@ ensures (\forall int i; 0 <= i & i < DIM * DIM;

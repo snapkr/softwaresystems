@@ -1,4 +1,4 @@
-package ss.week4.math;
+  package ss.week4.math;
 
 public class Sum implements Function, Integrandable {
 
@@ -28,7 +28,7 @@ public class Sum implements Function, Integrandable {
 
 	@Override
 	public Function integrand() {
-
+// TODO change Product to Integradnable -> see Joeps code
 		if (f1 instanceof Product || f2 instanceof Product) {
 			return null;
 		} else {
